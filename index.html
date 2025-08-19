@@ -27,9 +27,9 @@
 
     // Datos de población y superficie
     const zoneData = {
-      1: { name: "Zona 1", population: 48169, area: 2.35 },
-      2: { name: "Zona 2", population: 28550, area: 1.00 },
-      3: { name: "Zona 3", population: 60660, area: 1.90 }
+      1: { name: "Zona 1"},
+      2: { name: "Zona 2"},
+      3: { name: "Zona 3"}
     };
 
     // Coordenadas de las zonas
@@ -168,33 +168,63 @@
       [43.3688879116458, -8.420951960758137]
     ];
 
-    // Función para crear polígonos con estilos
-    function createZone(coordinates, zoneId, baseColor, highlightColor) {
-      return L.polygon(coordinates, {
-        color: baseColor,
-        fillColor: baseColor,
-        fillOpacity: 0.5,
-        className: `zone${zoneId}`
-      }).on('click', function() {
-        this.setStyle({
-          fillColor: highlightColor,
-          color: highlightColor
-        });
+   const allPolygons = [];
+
+function createZone(coordinates, zoneId, baseColor, highlightColor) {
+  const polygon = L.polygon(coordinates, {
+    color: baseColor,
+    fillColor: baseColor,
+    fillOpacity: 0.5
+  });
+
+  polygon.options.originalColor = baseColor;
+  polygon.options.highlightColor = highlightColor;
+  polygon.options.isHighlighted = false; // 🔄 Estado inicial
+
+  polygon.on('click', function () {
+    if (this.options.isHighlighted) {
+      // 🔄 Si ya está resaltado, lo desresaltamos
+      this.setStyle({
+        fillColor: this.options.originalColor,
+        color: this.options.originalColor
       });
+      this.options.isHighlighted = false;
+    } else {
+      // 🔄 Si no está resaltado, primero desresaltamos todos
+      allPolygons.forEach(p => {
+        p.setStyle({
+          fillColor: p.options.originalColor,
+          color: p.options.originalColor
+        });
+        p.options.isHighlighted = false;
+      });
+
+      // 🔄 Luego resaltamos el actual
+      this.setStyle({
+        fillColor: this.options.highlightColor,
+        color: this.options.highlightColor
+      });
+      this.options.isHighlighted = true;
     }
+  });
+
+  allPolygons.push(polygon);
+  return polygon;
+}
+
 
     // Crear y añadir las zonas al mapa
     const polygon1 = createZone(zona1, 1, '#6063AA', '#BDD72E')
       .addTo(map)
-      .bindPopup(`<b>${zoneData[1].name}</b><br>Población: ${zoneData[1].population.toLocaleString()}<br>Superficie: ${zoneData[1].area} km²`);
+      .bindPopup(`<b>${zoneData[1].name}</b>`);
 
     const polygon2 = createZone(zona2, 2, '#64BBC1', '#BDD72E')
       .addTo(map)
-      .bindPopup(`<b>${zoneData[2].name}</b><br>Población: ${zoneData[2].population.toLocaleString()}<br>Superficie: ${zoneData[2].area} km²`);
+      .bindPopup(`<b>${zoneData[2].name}</b>`);
 
     const polygon3 = createZone(zona3, 3, '#60B576', '#BDD72E')
       .addTo(map)
-      .bindPopup(`<b>${zoneData[3].name}</b><br>Población: ${zoneData[3].population.toLocaleString()}<br>Superficie: ${zoneData[3].area} km²`);
+     .bindPopup(`<b>${zoneData[3].name}</b>`);
 
     // Función para resaltar zonas desde Superset
     window.highlightZone = function(zoneNumber) {
