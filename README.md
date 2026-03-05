@@ -30,5 +30,5 @@ Una vez desplegado, se ha incrustado mediante un iframe en el dashboard del proy
 ---
 ## Licencia
 
-Este proyecto se distribuye bajo la licencia **MIT**. Consulta [LICENSE](LICENSE).
+Este proyecto se distribuye bajo la licencia **GNU**. Consulta [LICENSE](LICENSE).
 
