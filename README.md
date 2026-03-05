@@ -25,3 +25,10 @@ Una vez desplegado, se ha incrustado mediante un iframe en el dashboard del proy
 
 ```html
 <iframe src="https://TU_DOMINIO_NETLIFY.netlify.app" width="900" height="600" frameborder="0"></iframe>
+
+```
+---
+## Licencia
+
+Este proyecto se distribuye bajo la licencia **MIT**. Consulta [LICENSE](LICENSE).
+
